@@ -147,6 +147,7 @@ const Compass = (props) => {
 
 Compass.navigationOptions = {
     headerTitle: "מצפן",
+    headerBackTitle: "מסך הבית"
   };
 
 export default Compass;

@@ -52,9 +52,11 @@ const Home = (props) => {
 };
 
 Home.navigationOptions = (navData) => {
+  const user = navData.navigation.getParam('user');
+  const header = "שלום " + user.firstName  + ", בית כנסת " + user.synagogue
    return {
-      
-      headerTitle: navData.navigation.getParam('user').synagogue,
+      headerTitle: header,
+      //headerTitle: navData.navigation.getParam('user').synagogue,
       headerLeft:() => (<HeaderButtons HeaderButtonComponent={CustomHeaderButtons}>
         <Item title="Menu" iconName="ios-menu" onPress={() => {
           navData.navigation.toggleDrawer();

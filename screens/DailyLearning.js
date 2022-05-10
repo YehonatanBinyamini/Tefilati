@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
 
 DailyLearning.navigationOptions = {
     headerTitle: "לימוד יומי",
+    headerBackTitle: "מסך הבית"
   };
 
 export default DailyLearning;

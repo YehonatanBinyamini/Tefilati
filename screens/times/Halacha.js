@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 });
 
 Halacha.navigationOptions = {
-  headerTitle: "זמנים בהלכה",
+  headerTitle: "זמני היום בהלכה",
 };
 
 export default Halacha;

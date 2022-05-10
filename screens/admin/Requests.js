@@ -98,7 +98,7 @@ const Requests = (props) => {
             .then((querySnapshot) => {querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                 setNoData(false)
-
+                console.log(doc.data())
                 //(synagogueName, address, seats, fullName, phone, email, password)
                 const info = doc.data()
                 synagogues.push(new Request(info.synagogueName, info.synagogueAddress, info.synagogueSeats, info.firstName, info.lastName, info.phone, info.email, info.password, info.uid, info.shacharit, info.mincha, info.arvit, info.dafYomi))
@@ -133,6 +133,7 @@ const Requests = (props) => {
 
 Requests.navigationOptions = {
     headerTitle: "בקשות הרשמה",
+    headerBackTitle: "ניהול"
   };
 
 const styles = StyleSheet.create({

@@ -19,6 +19,7 @@ const NavigateToSynagogue = (props) => {
 
 NavigateToSynagogue.navigationOptions = {
     headerTitle: "ניווט לבית הכנסת",
+    headerBackTitle: "מסך הבית"
   };
 
 const styles = StyleSheet.create({

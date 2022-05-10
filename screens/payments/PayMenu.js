@@ -35,6 +35,7 @@ const PayMenu = (props) => {
 
 PayMenu.navigationOptions = {
     headerTitle: "תרומות ותשלומים",
+    headerBackTitle: "מסך הבית",
   };
 
 const styles = StyleSheet.create({

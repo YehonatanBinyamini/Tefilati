@@ -81,6 +81,7 @@ const Chats = (props) => {
 
 Chats.navigationOptions = {
   headerTitle: 'פורום',
+  headerBackTitle: "מסך הבית"
 };
 
 export default Chats;

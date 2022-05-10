@@ -85,6 +85,7 @@ const NotesBoard = (props) => {
 NotesBoard.navigationOptions = (navData) => {
     return {
         headerTitle: 'לוח מודעות',
+        headerBackTitle: "מסך הבית",
          
         headerRight:() => navData.navigation.getParam('user').isGabay ? 
         (<HeaderButtons HeaderButtonComponent={CustomHeaderButtons}>

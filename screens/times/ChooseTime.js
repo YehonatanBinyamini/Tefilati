@@ -34,7 +34,8 @@ const ChooseTime = (props) => {
 
 ChooseTime.navigationOptions = {
     headerTitle: "זמנים",
-  };
+    headerBackTitle: "מסך הבית"
+};
 
 const styles = StyleSheet.create({
     screen: {

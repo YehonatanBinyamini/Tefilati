@@ -388,6 +388,7 @@ const NewUser = (props) => {
 
 NewUser.navigationOptions = {
   headerTitle: "הרשמה",
+  headerBackTitle: "התחברות"
 };
 
 const styles = StyleSheet.create({
