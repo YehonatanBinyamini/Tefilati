@@ -11,7 +11,6 @@ import Halacha from "../screens/times/Halacha";
 import TefilotTimes from "../screens/times/TefilotTimes";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import DailyLearning from "../screens/DailyLearning";
-import Notes from "../screens/Notes";
 import Chats from "../screens/forums/Chats";
 import NotesBoard from "../screens/NotesBoard"
 import Waiting from "../screens/connect/Waiting";
@@ -21,7 +20,7 @@ import Compass from "../screens/Compass";
 import PayMenu from "../screens/payments/PayMenu";
 import PaySeat from "../screens/payments/PaySeat";
 import NavigateToSynagogue from "../screens/NavigateToSynagogue";
-//import Forum from "../screens/Notes";
+import Yzkor from "../screens/Yzkor";
 
 const ScreensNavigator = createStackNavigator({
     LoginScreen: Login,
@@ -40,6 +39,7 @@ const ScreensNavigator = createStackNavigator({
     PayMenuScreen: PayMenu,
     PaySeatScreen: PaySeat,
     NavigateToSynagogueScreen: NavigateToSynagogue,
+    YzkorScreen: Yzkor,
     },
     { 
         defaultNavigationOptions: {
