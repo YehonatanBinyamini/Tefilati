@@ -5,8 +5,8 @@ import CategoryGridTile from '../../components/CategoryGridTile';
 
 
 const CATEGORIES = [
-    new Category('c11','בקשות הרשמה','#f54242', 'RequestsScreen'),
-    new Category('c12','רשימת בתי כנסת','#aa123d', 'TefilotTimesScreen'),
+    new Category('c11','בקשות הרשמה','#67bbe7', 'RequestsScreen'),
+    new Category('c12','רשימת בתי כנסת','#89cff0', 'TefilotTimesScreen'),
 ]
 
 const Admin = (props) => {

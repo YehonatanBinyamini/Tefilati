@@ -8,7 +8,7 @@ const NavigateToSynagogue = (props) => {
    // console.log(urlAddress)
     return (
         <View style={styles.container}>
-            <MyButton text="נווט עם waze" onSelect={() => {
+            <MyButton text="נווט לבית הכנסת שלי" onSelect={() => {
                 Linking.openURL(`https://waze.com/ul?q=${synagogue.address.replaceAll(" ","?")}`)
             }}
             />

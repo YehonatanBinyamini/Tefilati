@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { Icon } from 'react-native-elements'
 
 const CategoryGridTile = (props) => {
     return (
@@ -9,6 +10,13 @@ const CategoryGridTile = (props) => {
       >
         <View style={{...styles.container, ...{backgroundColor: props.color}} }>
           <Text style={styles.title}>{props.title}</Text>
+          <View >
+            < Icon 
+              name={props.icon} 
+              size={50} 
+              color={'#000'} 
+            />
+          </View>
         </View>
       </TouchableOpacity>
     )
@@ -29,7 +37,8 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 3,
         padding: 20,
-        marginBottom: 10,  
+        marginBottom: 10, 
+        justifyContent: "space-around" 
 
     },
     title: {

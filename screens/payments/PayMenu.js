@@ -5,9 +5,9 @@ import Category from "../../models/others/category";
 import CategoryGridTile from "../../components/CategoryGridTile";
 
 const CATEGORIES = [
-    new Category('c14','קניית מושב','#f54242', 'PaySeatScreen'),
-    new Category('c15','תרום','#aa123d', 'TefilotTimesScreen'),
-    new Category('c16','קניית מצוות','#f5d142', 'TefilotTimesScreen'),
+    new Category('c14','קניית מושב','#21a6ce', 'PaySeatScreen'),
+    new Category('c15','תרום','#287bba', 'TefilotTimesScreen'),
+    new Category('c16','קניית מצוות','#333480', 'TefilotTimesScreen'),
 ]
 
 const PayMenu = (props) => {

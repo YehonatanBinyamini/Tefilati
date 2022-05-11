@@ -5,8 +5,8 @@ import Category from "../../models/others/category";
 import CategoryGridTile from "../../components/CategoryGridTile";
 
 const CATEGORIES = [
-    new Category('c9','זמנים בהלכה','#f54242', 'HalachaScreen'),
-    new Category('c10','זמני תפילות','#aa123d', 'TefilotTimesScreen'),
+    new Category('c9','זמנים בהלכה','#2955a1', 'HalachaScreen'),
+    new Category('c10','זמני תפילות','#287bba', 'TefilotTimesScreen'),
 ]
 
 const ChooseTime = (props) => {

@@ -13,6 +13,7 @@ const Waiting = () => {
 
 Waiting.navigationOptions = {
     headerTitle: "גבאי יקר",
+    headerBackTitle: "התחברות",
   };
 
 const styles = StyleSheet.create({

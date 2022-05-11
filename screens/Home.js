@@ -33,14 +33,14 @@ const Home = (props) => {
 
   const user = props.navigation.getParam('user');
   const synagogue = props.navigation.getParam('synagogue');
-
-  
+  const icons = {"זמנים": "schedule", "מצפן": "explore", "לימוד יומי": "menu-book", "יזכור": "portrait", "תשלומים ותרומות": "credit-card", "לוח מודעות": "content-paste", "פורום": "question-answer", "ניווט לבית הכנסת": "place"}
   const renderGridItem = (itemData) => {
     return (
       <CategoryGridTile 
         title= {itemData.item.title} 
         color={itemData.item.color}
         onSelect={() => {props.navigation.navigate(itemData.item.nextScreen, {user: user, synagogue: synagogue})}}
+        icon={icons[itemData.item.title]}
       />
     
     );
@@ -62,7 +62,12 @@ Home.navigationOptions = (navData) => {
           navData.navigation.toggleDrawer();
         }}/>
       </HeaderButtons>
-      )
+      ),
+      headerRight: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButtons}>
+        <Item title="LogOff" iconName="exit-outline" onPress={() => {
+          navData.navigation.replace("LoginScreen", {user: null });
+        }}/>
+      </HeaderButtons>)
     };
 };
 

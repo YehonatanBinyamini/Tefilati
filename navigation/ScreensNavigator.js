@@ -49,6 +49,7 @@ const ScreensNavigator = createStackNavigator({
           },
           headerTintColor: 'white',
           
+          
     }
 
 });
@@ -58,9 +59,16 @@ const MainNavigator = createDrawerNavigator({
     HomeNavigation: {
         screen: ScreensNavigator,
         navigationOptions: {
-            drawerLabel: 'מסך ראשי'
+            drawerLabel: 'מסך ראשי',
         }
     },
+    // Logoff: ScreensNavigator.Login, //{
+        
+    //     screen: ScreensNavigator,
+    //     navigationOptions: {
+    //         drawerLabel: 'התנתק',
+    //     }
+    // }
 
 });
 

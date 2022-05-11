@@ -118,7 +118,7 @@ const Login = (props) => {
       <KeyboardAvoidingView
       style={styles.container}
       behavior="padding"
-      backgroundColor="#ffffe2"
+      backgroundColor="#eaf0f4"
       >
       { isLoading ? <View style={styles.loading}><Loading/></View> : 
       <View style={styles.container2}>  
