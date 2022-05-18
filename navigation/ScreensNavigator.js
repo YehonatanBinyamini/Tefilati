@@ -21,6 +21,8 @@ import PayMenu from "../screens/payments/PayMenu";
 import PaySeat from "../screens/payments/PaySeat";
 import NavigateToSynagogue from "../screens/NavigateToSynagogue";
 import Yzkor from "../screens/Yzkor";
+import PrayersList from "../screens/drawer/PrayersList";
+import { Header } from "react-native-elements";
 
 const ScreensNavigator = createStackNavigator({
     LoginScreen: Login,
@@ -40,7 +42,10 @@ const ScreensNavigator = createStackNavigator({
     PaySeatScreen: PaySeat,
     NavigateToSynagogueScreen: NavigateToSynagogue,
     YzkorScreen: Yzkor,
+    PrayersListScreen: PrayersList,
+
     },
+
     { 
         defaultNavigationOptions: {
         headerStyle: {
@@ -62,13 +67,16 @@ const MainNavigator = createDrawerNavigator({
             drawerLabel: 'מסך ראשי',
         }
     },
-    // Logoff: ScreensNavigator.Login, //{
+    Mitpalelim: {
         
-    //     screen: ScreensNavigator,
-    //     navigationOptions: {
-    //         drawerLabel: 'התנתק',
-    //     }
-    // }
+        screen: PrayersList,
+        navigationOptions: {
+            drawerLabel: 'רשימת מתפללים',
+            user: Home.user,
+            synagogue: Home.synagogue,
+            header: Header,
+        }
+    }
 
 });
 

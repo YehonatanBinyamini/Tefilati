@@ -35,9 +35,7 @@ export default function App() {
     <View style={styles.screen}>
       <SafeAreaView>
       </SafeAreaView>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <ScreensNavigator />
-      </ImageBackground>
     </View>
     </TouchableWithoutFeedback>
   );
@@ -46,6 +44,7 @@ export default function App() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: "#bdeeff",
   },
   image: {
     

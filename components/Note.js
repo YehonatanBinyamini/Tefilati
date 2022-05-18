@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 const Note = (props) => {
     
     return (
-        <TouchableOpacity style={styles.NoteContainer}>
+        <TouchableOpacity style={styles.NoteContainer} onPress= {props.onSelect}>
             <Text style={styles.title} >{props.title}</Text>
             <Text style={styles.gabayAndDate} >   מאת {props.gabay} בתאריך {props.date}</Text>
             <Text style={styles.body} >{props.body}</Text>

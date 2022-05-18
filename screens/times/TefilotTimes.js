@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Text, View, StyleSheet} from 'react-native';
  
-//TODO:: need to fix the getDoc, for that the synagogue's details will be zminim to the return 
 
 const TefilotTimes = props => {
   const user = props.navigation.getParam('user');

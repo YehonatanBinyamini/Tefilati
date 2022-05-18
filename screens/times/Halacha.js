@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   StatusBar,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import zmaneiHayom from "../../models/others/zmaneiHayom";
@@ -16,10 +16,10 @@ import axios from "axios";
 import Icon from "react-native-vector-icons";
 import Colors from "../../constants/colors";
 const Item = ({ title, value }) => (
-  <View style={styles.item}>
+  <TouchableOpacity style={styles.item}>
     <Text style={styles.text}>{value}</Text>
     <Text style={styles.text}>{title}</Text>
-  </View>
+  </TouchableOpacity>
 );
 
 const Halacha = (props) => {
@@ -106,13 +106,14 @@ const Halacha = (props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {isLoading ? (
         <View style={styles.loading}>
           <Loading />
         </View>
       ) : (
-        <View style={{ alignItems: "center" }}>
+        <View style={{ flex: 1, justifyContent: "flex-start", }}>
+          <View style={{alignItems: "center"}}>
           {isPicked && (
             <Picker
               onValueChange={(value, index) => {
@@ -158,17 +159,19 @@ const Halacha = (props) => {
               <Text style={styles.buttonOutlineText}>{displayChoice}</Text>
             </TouchableOpacity>
           </View>
+        </View>
           { isSelected && (
           <FlatList
             data={data}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
+            style={{}}
           />
           ) 
           }
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -181,18 +184,20 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 10,
     flexGrow: 1,
     height: "100%",
+    width: "100%",
   },
   item: {
     backgroundColor: "#bdeeff",
     //backgroundColor: '#61dafb',
+    flex: 1,
     padding: 2,
     marginVertical: 2,
     justifyContent: "space-between",
     flexDirection: "row",
-    width: "77%",
-    height: 38,
+    //width: "78%",
+    height: 40,
     alignItems: 'center',
-    left:4,
+    //left: 4,
     paddingHorizontal: 10
   },
   text: {
@@ -204,6 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 40,
     alignItems: "center",
+    justifyContent: "center"
   },
   buttonContainer: {
     marginBottom: 20,
@@ -211,6 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
+    //left: 80
   },
   button: {
     backgroundColor: Colors.myBlue,
@@ -245,6 +252,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: "#FFF",
+    justifyContent: "center",
+    //alignItems: "center"
   },
 });
 

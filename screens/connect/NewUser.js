@@ -92,11 +92,7 @@ const NewUser = (props) => {
   const validation = () => {
     // the '*' its because of the slice off errorMessage
 
-    if (phone.length != 10 || phone[0] != "0" || phone[1] != "5") {
-      setErrorMessage("*****מספר לא חוקי");
-      return false;
-    }
-
+    
     if (firstName.length == 0) {
       setErrorMessage("*****שם פרטי הוא שדה חובה");
       return false;
@@ -105,7 +101,11 @@ const NewUser = (props) => {
       setErrorMessage("*****שם משפחה הוא שדה חובה");
       return false;
     }
-    if (synagogue === "*****בחר בית כנסת") {
+    if (phone.length != 10 || phone[0] != "0" || phone[1] != "5") {
+      setErrorMessage("*****מספר טלפון לא חוקי");
+      return false;
+    }
+    if (synagogue === "בחר בית כנסת") {
       setErrorMessage("*****לא נבחר בית כנסת");
       return false;
     }
@@ -180,6 +180,7 @@ const NewUser = (props) => {
   };
 
   const handlePicker = () => {
+    Keyboard.dismiss();
     setIsPicked(!isPicked);
     setChoice(synagogue);
     if (synagogue === "בית כנסת חדש" && isPicked ){

@@ -50,7 +50,7 @@ const addUserToFirestore = (user) => {
 const renderRequestItem = (itemData) => {
     return (
       <SynagogueDetails 
-        onSelect = {() => {
+onSelect = {() => {
             Alert.alert("בית כנסת " + itemData.item.synagogueName, "האם לאשר את הבקשה?", 
                 [ {text: "אשר", onPress: () => {
                                 Alert.alert("האם לאשר את הבקשה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
@@ -80,7 +80,7 @@ const renderRequestItem = (itemData) => {
         email = {itemData.item.email}
         password = {itemData.item.password}
       />
-    
+        
     );
   };
 

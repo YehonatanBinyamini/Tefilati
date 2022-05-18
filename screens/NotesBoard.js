@@ -2,47 +2,85 @@ import React, {useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Modal, TouchableWithoutFeedback, TextInput, Keyboard, Alert} from 'react-native'
 import NoteComponent from "../components/Note";
 import Note from "../models/others/Note";
-import { doc, setDoc, collection, getDoc, getDocs } from "firebase/firestore"; 
+import { doc, setDoc, collection, getDoc, getDocs, deleteDoc } from "firebase/firestore"; 
 import { db } from "../db/firebase";
 import Gabay from "../models/users/Gabay"
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import CustomHeaderButtons from "../components/HeaderButton";
 import MyButton from "../components/MyButton";
 
-const addNewNote = () => {
-    console.log("Noting")
-    return (<Modal
-                animationType= {"slide"}
-                transparent= {false}
-                visible={true}>
-              </Modal>
-    );    
-      
+const deleteNoteFromFirestore = (user, subject) => {
+    deleteDoc(doc(db, "Synagogues", user.synagogue, "NotesBoard", subject))
+    .then((res) => {
+        console.log(`Note ${subject} was deleted`)
+    })
+    .catch((err) => {
+        console.log("err is:\n", err)
+
+    })
 }
 
-const renderNoteItem = (itemData) => {
-    return (
-      <NoteComponent 
-        title = {itemData.item.subject} 
-        date = {itemData.item.date}
-        gabay = {itemData.item.gabay}
-        body =  {itemData.item.body}
-      />
+const addNewNoteToFirestore = (user, note) => {
     
-    );
-  };
+    const ref = doc(db, "Synagogues", user.synagogue, "NotesBoard", note.subject);
+    const a = setDoc(ref, {
+        gabay: note.gabay,
+        date: note.date,
+        body: note.body,
+    });
+}
+
 
 const NotesBoard = (props) => {
+    
+    const user = props.navigation.getParam('user');
+    
+    const renderNoteItem = (itemData) => {
+        return (
+          <NoteComponent 
+            title = {itemData.item.subject} 
+            date = {itemData.item.date}
+            gabay = {itemData.item.gabay}
+            body =  {itemData.item.body}
+            onSelect = {() => {
+                Alert.alert(itemData.item.subject, "בחר את האפשרות המתאימה", 
+                    [ {text: "ערוך", onPress: () => {
+                                    setModalTitle("עריכת מודעה")
+                                    setShowModal(true)
+                                    setSubject(itemData.item.subject)
+                                    setBody(itemData.item.body)
+                                    setOldSubject(itemData.item.subject)
+                                    setOldBody(itemData.item.body)
+                                    }
+                      }, 
+                      {text: "ביטול"}, {text: "מחק", style: "destructive", onPress: () => {
+                                    Alert.alert("האם למחוק את המודעה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
+                                        deleteNoteFromFirestore(user, itemData.item.subject) 
+                                        Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
+                                                }
+                                            }])
+                        }}, ]
+                      )
+                
+            }}
+          />
+        
+        );
+      };
     
     const [NOTES, setNOTES] = useState ([])
     const [noData, setNoData] = useState (true)
     const [showModal, setShowModal] = useState (false)
     const [subject, setSubject] = useState ("")
-    const [body, setBody] = useState ("")
-    const user = props.navigation.getParam('user');
+    const [oldSubject, setOldSubject] = useState ("")
+    const [body, setBody] = useState ("")    
+    const [oldBody, setOldBody] = useState ("")
+    const [modalTitle, setModalTitle] = useState ("מודעה חדשה")
+
+    //TODO:: find a way to refresh the useEffect/flatlist after editing or deleting
     
     useEffect(() => {
-        const col = collection(db, "synagogue", user.synagogue , "NotesBoard");
+        const col = collection(db, "Synagogues", user.synagogue , "NotesBoard");
         const asy =  async () => {
             const data = await getDocs(col)
             .then((querySnapshot) => {querySnapshot.forEach((note) => {
@@ -66,16 +104,20 @@ const NotesBoard = (props) => {
          <View style={styles.container}>
              
              { noData &&<Text style={styles.text}>אין מודעות</Text>}
-        <MyButton text="מודעה חדשה" onSelect={() => {
-                setShowModal(true)
+       {user.isGabay && <MyButton text="מודעה חדשה" onSelect={() => {
+                setModalTitle("מודעה חדשה"); 
+                setSubject("")
+                setBody("")
+                setShowModal(true);
             }}/>
+        }
             <Modal
                             animationType= {"slide"}
                             transparent= {false}
                             visible={showModal}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                         <View style={styles.ModalContainer}>
-                        <Text style={styles.ModalTitle}>מודעה חדשה</Text>
+                        <Text style={styles.ModalTitle}>{modalTitle}</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     placeholder="כותרת"
@@ -103,14 +145,18 @@ const NotesBoard = (props) => {
             <MyButton text="ביטול" onSelect={() => { setShowModal(!showModal)}} changeWidth="50%"/>
             <MyButton text="אישור" onSelect={() => {
               setNoData(false)
-              const now = "11-5-2022" //new Date().getDate()
-              const note = new Note(user.firstName+" "+user.lastName, now, subject, body)
-              NOTES.push(note)
-              console.log(new Date().getDate())
-              //Alert.alert("פרטי בית הכנסת נשמרו", "יש לאשר את פרטי המשתמש", [{text: "הבנתי"}])
-              setShowModal(!showModal)}} 
-              changeWidth="50%" />
-          </View>
+              if ((subject !== oldSubject || body !== oldBody) && (oldSubject !== "" && oldBody !== "" )) {
+                deleteNoteFromFirestore(user, oldSubject)
+              }
+                const now = new Date(Date.now()).toLocaleDateString()
+                const note = new Note(user.firstName+" "+user.lastName, now, subject, body)
+                console.log(note, user)
+                addNewNoteToFirestore(user, note);
+                NOTES.push(note)
+                setShowModal(!showModal)
+            }} 
+                  changeWidth="50%" />
+                  </View>
                         </View>
                     </TouchableWithoutFeedback>
               </Modal>      

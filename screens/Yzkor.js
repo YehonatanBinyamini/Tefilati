@@ -28,8 +28,8 @@ const Yzkor = (props) => {
       return (
         //<FlatList data={CATEGORIES} numColumns={2} renderItem={renderGridItem} />
         <View style={styles.screen}> 
-        <ImageBackground source={Candle} resizeMode="stretch" style={styles.image}>
-            <Text style={styles.text}>"וְנָתַתִּי לָהֶם בְּבֵיתִי וּבְחוֹמֹתַי יָד וָשֵׁם..."</Text>
+            <ImageBackground source={Candle} resizeMode="stretch" style={styles.image}>
+                <Text style={styles.text}>"וְנָתַתִּי לָהֶם בְּבֵיתִי וּבְחוֹמֹתַי יָד וָשֵׁם..."</Text>
             </ImageBackground>
         </View>
       );
