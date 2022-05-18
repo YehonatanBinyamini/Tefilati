@@ -42,7 +42,7 @@ const NotesBoard = (props) => {
             date = {itemData.item.date}
             gabay = {itemData.item.gabay}
             body =  {itemData.item.body}
-            onSelect = {() => {
+            onSelect = {() => { if (user.isGabay){
                 Alert.alert(itemData.item.subject, "בחר את האפשרות המתאימה", 
                     [ {text: "ערוך", onPress: () => {
                                     setModalTitle("עריכת מודעה")
@@ -61,7 +61,7 @@ const NotesBoard = (props) => {
                                             }])
                         }}, ]
                       )
-                
+                    }  
             }}
           />
         

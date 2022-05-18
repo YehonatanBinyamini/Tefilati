@@ -9,7 +9,7 @@ const MyButton = (props) => {
             width: props.changeWidth || "60%",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: 40,
+            marginTop: props.changeMarginTop || 40,
             marginBottom: 15,}}>
         <TouchableOpacity style={styles.button} onPress={props.onSelect}>
             
