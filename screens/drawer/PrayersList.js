@@ -71,7 +71,7 @@ useEffect(() => {
     .catch((err) => {
         console.log("doc err", err)
     })
-},[props.navigation])
+},[])
 
 const renderUserItem = (itemData) => {
     return (

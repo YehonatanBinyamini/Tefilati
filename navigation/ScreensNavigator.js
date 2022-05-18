@@ -23,12 +23,14 @@ import NavigateToSynagogue from "../screens/NavigateToSynagogue";
 import Yzkor from "../screens/Yzkor";
 import PrayersList from "../screens/drawer/PrayersList";
 import { Header } from "react-native-elements";
+import Synagogues from "../screens/admin/Synagogues";
+
 
 const ScreensNavigator = createStackNavigator({
+    AdminScreen: Admin,
     LoginScreen: Login,
     HomeScreen: Home,
     WaitingScreen: Waiting,
-    AdminScreen: Admin,
     TimesScreen: ChooseTime,
     NewUserScreen: NewUser,
     HalachaScreen: Halacha,
@@ -43,7 +45,7 @@ const ScreensNavigator = createStackNavigator({
     NavigateToSynagogueScreen: NavigateToSynagogue,
     YzkorScreen: Yzkor,
     PrayersListScreen: PrayersList,
-
+    SynagoguesScreen: Synagogues,
     },
 
     { 

@@ -2,11 +2,13 @@ import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import Category from '../../models/others/category';
 import CategoryGridTile from '../../components/CategoryGridTile';
+import CustomHeaderButtons from "../../components/HeaderButton";
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
 
 const CATEGORIES = [
     new Category('c11','בקשות הרשמה','#67bbe7', 'RequestsScreen'),
-    new Category('c12','רשימת בתי כנסת','#89cff0', 'TefilotTimesScreen'),
+    new Category('c12','רשימת בתי כנסת','#89cff0', 'SynagoguesScreen'),
 ]
 
 const Admin = (props) => {
@@ -29,8 +31,15 @@ const Admin = (props) => {
 };
 
 
-Admin.navigationOptions = {
+Admin.navigationOptions = (navData) => {
+    return { 
     headerTitle: "ניהול מערכת תפילתי",
+    headerRight: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButtons}>
+        <Item title="LogOff" iconName="exit-outline" onPress={() => {
+          navData.navigation.replace("LoginScreen", {user: null });
+        }}/>
+      </HeaderButtons>)
+      }
 };
 
 
