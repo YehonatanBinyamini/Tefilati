@@ -3,7 +3,7 @@ import {  StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 const ZmanItem = props => {
     return (
-    <View style={styles.listItem}>
+        <View style={styles.listItem}>
         <Text>{props.name}{props.value}</Text>
     </View>
     );

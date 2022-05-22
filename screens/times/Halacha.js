@@ -13,11 +13,21 @@ import zmaneiHayom from "../../models/others/zmaneiHayom";
 import ReduxThunk from "redux-thunk";
 import Loading from "../../components/Loading";
 import axios from "axios";
-import Icon from "react-native-vector-icons";
 import Colors from "../../constants/colors";
+import { Icon } from 'react-native-elements'
+
 const Item = ({ title, value }) => (
   <TouchableOpacity style={styles.item}>
-    <Text style={styles.text}>{value}</Text>
+    <View style={{flexDirection: "row", alignItems: "center"}}>
+      < Icon 
+      name={"schedule"} 
+      size={22} 
+      color={'#000'} 
+      />
+      <View style={{left:10}}>
+        <Text style={styles.text}>{value}</Text>
+      </View>
+    </View>
     <Text style={styles.text}>{title}</Text>
   </TouchableOpacity>
 );
@@ -27,7 +37,7 @@ const Halacha = (props) => {
   //const [selectedValue, setSelectedValue] = useState("בחר עיר");
   const [isLoading, setIsLoading] = useState(true);
   const [isPicked, setIsPicked] = useState(false);
-  const [cityChoice, setCityChoice] = useState("בחר עיר");
+  const [cityChoice, setCityChoice] = useState("אילת");
   const [displayChoice, setDisplayChoice] = useState("בחר עיר");
   const [locationID, setLocationID] = useState("295277");
   const [request, setRequest] = useState(false);

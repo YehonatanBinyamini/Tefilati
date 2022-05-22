@@ -34,8 +34,6 @@ const Yzkor = (props) => {
     const [fullName, setFullName] = useState("")
     const [date, setDate] = useState("")
 
-    NAMES.push(new Niftar("רבקה בת יעל",'ט"ו אייר תשע"ג'))
-    NAMES.push(new Niftar("משה בן שרה",'י"ד ניסן תשמ"ג'))
 
     const user = props.navigation.getParam('user');
     const synagogue = props.navigation.getParam('synagogue');
@@ -65,10 +63,14 @@ const Yzkor = (props) => {
             date={itemData.item.date}
             onSelect= {() => { if (user.isGabay){
                 Alert.alert(itemData.item.fullName, "בחר את האפשרות המתאימה", 
-                [{text: "ביטול"}, {text: "מחק", style: "destructive", onPress: () => {
-                                Alert.alert("האם למחוק את המודעה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
-                                    deleteNameFromFirestore(user, itemData.item.fullName) 
-                                    Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
+                [{text: "ביטול"}, {text: "הסר", style: "destructive", onPress: () => {
+                                Alert.alert("האם להסיר את השם?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
+                                    deleteNameFromFirestore(user, itemData.item.fullName)
+                                    const index = NAMES.indexOf(itemData.item);
+                                        if (index > -1) {
+                                            NAMES.splice(index, 1); // 2nd parameter means remove one item only
+                                        } 
+                                    Alert.alert("השם הוסר", null, [ {text: "בסדר"}])
                                             }
                                         }])
                     }}, ]
@@ -116,11 +118,13 @@ const Yzkor = (props) => {
                             <View style={styles.modalButtons}>
             <MyButton text="ביטול" onSelect={() => { setShowModal(!showModal)}} changeWidth="50%"/>
             <MyButton text="אישור" onSelect={() => {
+                if (fullName.length > 0 && date.length > 0) {
                 const newName = new Niftar(fullName, date)
                 console.log(newName, user)
                 addNewNameToFirestore(user, newName);
                 NAMES.push(newName)
                 setShowModal(!showModal)
+            }
             }} 
                   changeWidth="50%" />
                   </View>

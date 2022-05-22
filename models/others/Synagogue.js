@@ -11,7 +11,7 @@ class Synagogue{
         this.dafYomi = dafYomi;
     }
     setShacharit(time) {
-        this.shachrit = time;
+        this.shacharit = time;
     }
     setMincha(time) {
         this.mincha = time;

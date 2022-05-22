@@ -27,8 +27,8 @@ import Synagogues from "../screens/admin/Synagogues";
 
 
 const ScreensNavigator = createStackNavigator({
-    AdminScreen: Admin,
     LoginScreen: Login,
+    AdminScreen: Admin,
     HomeScreen: Home,
     WaitingScreen: Waiting,
     TimesScreen: ChooseTime,

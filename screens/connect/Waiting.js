@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import CustomHeaderButtons from "../../components/HeaderButton";
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
 const Waiting = () => {
     return (
@@ -11,10 +13,18 @@ const Waiting = () => {
     )
 };
 
-Waiting.navigationOptions = {
-    headerTitle: "גבאי יקר",
-    headerBackTitle: "התחברות",
-  };
+Waiting.navigationOptions= (navData) => {
+  return {
+      headerTitle: "גבאי יקר",
+      headerBackTitle: "התחברות",
+    headerRight: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButtons}>
+      <Item title="LogOff" iconName="exit-outline" onPress={() => {
+        navData.navigation.replace("LoginScreen", {user: null });
+      }}/>
+    </HeaderButtons>)
+    }
+};
+
 
 const styles = StyleSheet.create({
     container: {

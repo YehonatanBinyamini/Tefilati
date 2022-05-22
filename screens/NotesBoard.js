@@ -56,6 +56,10 @@ const NotesBoard = (props) => {
                       {text: "ביטול"}, {text: "מחק", style: "destructive", onPress: () => {
                                     Alert.alert("האם למחוק את המודעה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
                                         deleteNoteFromFirestore(user, itemData.item.subject) 
+                                        const index = NOTES.indexOf(itemData.item);
+                                        if (index > -1) {
+                                            NOTES.splice(index, 1); // 2nd parameter means remove one item only
+                                        }
                                         Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
                                                 }
                                             }])
@@ -76,6 +80,7 @@ const NotesBoard = (props) => {
     const [body, setBody] = useState ("")    
     const [oldBody, setOldBody] = useState ("")
     const [modalTitle, setModalTitle] = useState ("מודעה חדשה")
+    const [reset, setReset] = useState (false)
 
     //TODO:: find a way to refresh the useEffect/flatlist after editing or deleting
     
@@ -86,7 +91,6 @@ const NotesBoard = (props) => {
             .then((querySnapshot) => {querySnapshot.forEach((note) => {
                 // doc.data() is never undefined for query doc snapshots
                 setNoData(false)
-
                 NOTES.push(new Note(note.data().gabay, note.data().date, note.id, note.data().body))
             });
         })
@@ -95,7 +99,7 @@ const NotesBoard = (props) => {
     .catch((err) => {
         console.log(err.message)
     })
-}   ,[]);
+}   ,[reset]);
 //upload notes to firestore:
 
     //const ref = doc(db, "users", user.uid);

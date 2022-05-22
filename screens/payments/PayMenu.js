@@ -8,6 +8,7 @@ const CATEGORIES = [
     new Category('c14','קניית מושב','#21a6ce', 'PaySeatScreen'),
     new Category('c15','תרום','#287bba', 'TefilotTimesScreen'),
     new Category('c16','קניית מצוות','#333480', 'TefilotTimesScreen'),
+    new Category('c16','פירוט תשלומים','#d5f3fe', 'TefilotTimesScreen'),
 ]
 
 const PayMenu = (props) => {
