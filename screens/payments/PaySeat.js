@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { StyleSheet, FlatList, TouchableOpacity, Text, View, StatusBar, TextInput, Linking } from "react-native";
 import { Button } from "react-native-elements";
 import CategoryGridTile from "../../components/CategoryGridTile";
-import { doc, setDoc, collection, getDoc, getDocs } from "firebase/firestore"; 
+import { doc, setDoc, collection, getDoc, getDocs, updateDoc } from "firebase/firestore"; 
 import { db } from "../../db/firebase"
 import Category from "../../models/others/category";
 import Loading from "../../components/Loading";
@@ -17,10 +17,30 @@ const PaySeat = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
     const [seatNumber, setSeatNumber] = useState("");
+    const [price, setPrice] = useState("");
+    const [thereIsSeat, setThereIsSeat] = useState(false)
+    const [ownSeat, setOwnSeat] = useState([])
+    const [displaySeats, setDisplaySeats] = useState("")
+    const user = props.navigation.getParam("user");
+    const synagogue = props.navigation.getParam("synagogue");
+    //console.log(synagogue.seats)
+    let firstSeat;
 
     useEffect(() => {
-        const user = props.navigation.getParam("user");
-        const synagogue = props.navigation.getParam("synagogue");
+        for (let i=0; i<synagogue.seats.length; i++) {
+            if (synagogue.seats[i] == user.uid){
+                ownSeat.push(i+1)
+                console.log(ownSeat)
+            }    
+        }
+        if (ownSeat.length == 1 ) {
+            setDisplaySeats(`מושב ${ownSeat}`)
+            setThereIsSeat(true)
+        } 
+        else if (ownSeat.length > 1) {
+            setDisplaySeats(`מושבים ${ownSeat}`)
+            setThereIsSeat(true)       
+        }   
         const docRef = doc(db, "Synagogues", user.synagogue);
         const asy =  async () => {
             const doc = await getDoc(docRef)
@@ -56,17 +76,50 @@ const PaySeat = (props) => {
                     keyboardType="numeric"
                     />
                 </View>
+                <View style={{maxWidth: "37%"}}>
+                    <TextInput
+                    placeholder="הקש מחיר מושב"
+                    value={price}
+                    onChangeText={(text) => {
+                    setPrice(text);
+                    setErrorMessage("");
+                    }}
+                    style={styles.input}
+                    keyboardType="numeric"
+                    />
+                </View>
                     <View style={{width: "70%"}}>
                         <MyButton text="קנה" onSelect={() => {
                             if (seatNumber.length == 0){
                                 Alert.alert("נא הקש מספר מושב", null, [ {text: "בסדר"}]);
+                            } else if (price.length == 0) {
+                                Alert.alert("נא הקש את מחיר המושב", null, [ {text: "בסדר"}]);
+                            } else if (seatNumber > synagogue.seats.length) {
+                                Alert.alert("מספר המושב לא תקין", "בחר מושב אחר", [ {text: "בסדר"}]);
+                            } else if (synagogue.seats[seatNumber-1] != "פנוי") {
+                                Alert.alert("המושב תפוס", "בחר מושב אחר", [ {text: "בסדר"}]);                               
                             } else {
-                                Alert.alert(`האם תרצה לקנות את מושב מספר ${seatNumber}?`, "עבור אל אפליקציית ביט", [ {text: "לא"}, {text: "כן", onPress: () => {
+                                Alert.alert(`האם ברצונך לקנות את מושב מספר ${seatNumber}?`, "עבור אל אפליקציית ביט", [ {text: "לא"}, {text: "כן", onPress: () => {
                                     Linking.openURL("https://www.bitpay.co.il/app/");
+                                    synagogue.seats[seatNumber-1] = user.uid;
+                                    const theDoc = doc(db, "Synagogues", synagogue.name);
+                                    updateDoc(theDoc, {
+                                        seatsArray: synagogue.seats,
+                                    });
+                                    const ref = doc(db, "Synagogues", synagogue.name, "Payments", `קניית מושב ${seatNumber}`);
+                                    const date = new Date(Date.now()).toLocaleDateString();
+                                    const a = setDoc(ref, {
+                                    fullName: user.firstName + " " + user.lastName,
+                                    price: price,
+                                    type: "תשלום",
+                                    date: date,
+                                    subject: `קניית מושב ${seatNumber}`,
+                                    });
                                 } }])
                             }
                         }} />
                     </View>
+                    { thereIsSeat && ( <View ><Text style={styles.subTitle}> {displaySeats} בבעלותך</Text></View>)}
           </View>
     }</View>
   );
