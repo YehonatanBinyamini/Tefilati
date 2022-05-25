@@ -18,7 +18,7 @@ import NewUser from "./screens/connect/NewUser";
 import Images from "./constants/images";
 import ChooseTime from './screens/times/ChooseTime';
 import ScreensNavigator from "./navigation/ScreensNavigator"
-
+import Colors from "./constants/colors";
 
 export default function App() {
   
@@ -44,7 +44,7 @@ export default function App() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#bdeeff",
+    backgroundColor: Colors.myBlue,
   },
   image: {
     

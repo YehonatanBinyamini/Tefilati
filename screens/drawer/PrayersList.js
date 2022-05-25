@@ -34,7 +34,6 @@ const PrayersList = props => {
             .then((querySnapshot) => { querySnapshot.forEach((doc) => {
                 const info = doc.data()
                 USERS.push(new Prayer(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info. synagogue))
-                //console.log(doc.id, " => ", doc.data())
             })
             })
             .catch((err) => {
@@ -59,8 +58,8 @@ useEffect(() => {
                 setIsLoading(false)
                 //USERS.push(user)
                 findUsersInSynagogue(user.synagogue)
-            }
-            else {
+              }
+              else {
                 user = new Prayer(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info.synagogue)
             }
         }

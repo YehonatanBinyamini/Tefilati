@@ -33,6 +33,7 @@ const Yzkor = (props) => {
     const [showModal, setShowModal] = useState (false)
     const [fullName, setFullName] = useState("")
     const [date, setDate] = useState("")
+    const [noData, setNoData] = useState (true)
 
 
     const user = props.navigation.getParam('user');
@@ -44,6 +45,7 @@ const Yzkor = (props) => {
             const data = await getDocs(col)
             .then((querySnapshot) => {querySnapshot.forEach((person) => {
                 // doc.data() is never undefined for query doc snapshots
+                setNoData(false)
                 NAMES.push(new Niftar(person.id, person.data().date))
             });
         })
@@ -52,7 +54,7 @@ const Yzkor = (props) => {
     .catch((err) => {
         console.log(err.message)
     })
-}   ,[]);
+    },[]);
 
     const renderNamesItem = (itemData) => {
       
@@ -84,8 +86,8 @@ const Yzkor = (props) => {
       };
     
       return (
-        //<FlatList data={CATEGORIES} numColumns={2} renderItem={renderGridItem} />
-        <View style={styles.screen}> 
+          <View style={styles.screen}> 
+            { noData && (<View><Text>טקסט</Text></View>)}
             <Modal
                             animationType= {"slide"}
                             transparent= {false}
@@ -141,7 +143,7 @@ const Yzkor = (props) => {
                         setShowModal(true);}}
                     />
                 </View>
-        }
+        }       
                 <FlatList
                     data={NAMES} numColumns={2} renderItem={renderNamesItem}
                     contentContainerStyle={{ paddingBottom: 20, alignItems: "center", justifyContent: "space-around" }}
@@ -164,8 +166,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems:'center',
         fontWeight: "bold",
-
-       // justifyContent: 'center'
       },
     text: {
         fontSize: 24,

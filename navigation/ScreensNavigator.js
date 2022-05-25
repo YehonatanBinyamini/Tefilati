@@ -24,7 +24,9 @@ import Yzkor from "../screens/Yzkor";
 import PrayersList from "../screens/drawer/PrayersList";
 import { Header } from "react-native-elements";
 import Synagogues from "../screens/admin/Synagogues";
-
+import Donation from "../screens/payments/Donation";
+import Details from "../screens/payments/Details";
+import Sales from "../screens/payments/Sales";
 
 const ScreensNavigator = createStackNavigator({
     LoginScreen: Login,
@@ -46,6 +48,9 @@ const ScreensNavigator = createStackNavigator({
     YzkorScreen: Yzkor,
     PrayersListScreen: PrayersList,
     SynagoguesScreen: Synagogues,
+    DonationScreen: Donation,
+    DetailsScreen: Details,
+    SalesScreen: Sales,
     },
 
     { 

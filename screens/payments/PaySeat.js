@@ -127,6 +127,7 @@ const PaySeat = (props) => {
 
 PaySeat.navigationOptions = {
   headerTitle: "קניית מושב",
+  headerBackTitle: "הקודם"
 };
 
 const styles = StyleSheet.create({

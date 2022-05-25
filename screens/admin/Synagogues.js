@@ -59,7 +59,6 @@ const Synagogues = (props) => {
         const querySnapshot = await getDocs(q)
         .then((querySnapshot) => { querySnapshot.forEach((doc) => {
             const info = doc.data()
-            console.log("sada")
             users[info.uid] = new Gabay(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info. synagogue)
             //console.log("sada")doc.id, " => ", doc.data())
         })
@@ -83,7 +82,7 @@ const Synagogues = (props) => {
                 const info = doc.data()
                 console.log("********yyyyy********\n",doc._document.key.path.segments[6])
                 const i = info.uidGabay;
-                synagogues.push(new Request(doc._document.key.path.segments[6], info.address, info.seatsArray, users[i].firstName, users[i].lastName, users[i].phone, users[i].email, users[i].password, info.uidGabay, info.shacharit, info.mincha, info.arvit, info.dafYomi))
+                synagogues.push(new Request(doc._document.key.path.segments[6], info.address, info.seatsArray, users[i].firstName, users[i].lastName, users[i].phoneNumber, users[i].email, users[i].password, info.uidGabay, info.shacharit, info.mincha, info.arvit, info.dafYomi))
                 
             })
         })

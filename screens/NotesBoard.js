@@ -80,7 +80,6 @@ const NotesBoard = (props) => {
     const [body, setBody] = useState ("")    
     const [oldBody, setOldBody] = useState ("")
     const [modalTitle, setModalTitle] = useState ("מודעה חדשה")
-    const [reset, setReset] = useState (false)
 
     //TODO:: find a way to refresh the useEffect/flatlist after editing or deleting
     
@@ -99,7 +98,7 @@ const NotesBoard = (props) => {
     .catch((err) => {
         console.log(err.message)
     })
-}   ,[reset]);
+}   ,[]);
 //upload notes to firestore:
 
     //const ref = doc(db, "users", user.uid);
