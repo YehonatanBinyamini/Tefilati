@@ -13,12 +13,11 @@ const Sale = (props) => {
             flexDirection: "row",
             height: 50,
             alignItems: 'center',
-            paddingHorizontal: 15,
+            paddingHorizontal: 15, 
         }} 
             onPress= {props.onSelect}>
-                    <Text style={styles.text}>{props.fullName}</Text>
-                    <Text>{props.price}</Text>
-                    <Text style={styles.text} >{props.kind}</Text>
+                    <Text>{props.price+' ש"ח'}</Text>
+                    <Text style={styles.text} >{props.type}</Text>
         </TouchableOpacity>
     )
 }

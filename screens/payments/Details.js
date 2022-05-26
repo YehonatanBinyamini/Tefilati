@@ -37,6 +37,7 @@ const Details = (props) => {
                                         if (index > -1) {
                                             cards.splice(index, 1); // 2nd parameter means remove one item only
                                         } 
+                                        setCards([...cards])
                                         Alert.alert(`התיעוד ${itemData.item.subject} נמחק`, null, [ {text: "בסדר"}])
                                                 }
                                             }])
@@ -101,6 +102,7 @@ const Details = (props) => {
                     renderItem={renderPaymentItem}
                     keyExtractor={item => item.docId}
                     contentContainerStyle= {{paddingBottom: 60, padding: 20, alignItems: "center"}}
+                    extraData={cards}
                  />
         </View>
     )

@@ -1,11 +1,13 @@
 class Sale {
-    constructor(docId, fullName, price, type, isSold) {
-       this.docId = docId;
+    constructor( fullName, price, type, isSold) {
        this.fullName = fullName;
        this.price = price;
        this.type = type;
        this.isSold = isSold;
       }
+setIsSold(val){
+    this.isSold = val;
+}
 }
 
 export default Sale;

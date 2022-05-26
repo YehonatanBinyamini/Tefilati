@@ -47,47 +47,52 @@ const addUserToFirestore = (user) => {
             });
 }
 
-const renderRequestItem = (itemData) => {
-    return (
-      <SynagogueDetails 
-onSelect = {() => {
-            Alert.alert("בית כנסת " + itemData.item.synagogueName, "האם לאשר את הבקשה?", 
-                [ {text: "אשר", onPress: () => {
-                                Alert.alert("האם לאשר את הבקשה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
-                                    addUserToFirestore(itemData.item) // users 
-                                    addSynagogueToFirestore(itemData.item) //synagogues
-                                    deleteRequestFromFirestore(itemData.item) //requests
-                                    Alert.alert("הבקשה אושרה", null, [ {text: "בסדר"}])
-                                             }
-                                        }])
-                                }
-                  }, 
-                  {text: "ביטול"}, {text: "דחה", style: "destructive", onPress: () => {
-                                Alert.alert("האם לדחות את הבקשה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
-                                    deleteRequestFromFirestore(itemData.item) //requests
-                                    Alert.alert("הבקשה נדחתה", null, [ {text: "בסדר"}])
-                                            }
-                                        }])
-                    }}, ]
-                  )
-            
-        }}
-        synagogueName = {itemData.item.synagogueName} 
-        synagogueAddress = {itemData.item.synagogueAddress}
-        synagogueSeats = {itemData.item.synagogueSeats}
-        fullName = {itemData.item.firstName + " " + itemData.item.lastName}
-        phone =  {itemData.item.phone}
-        email = {itemData.item.email}
-        password = {itemData.item.password}
-      />
-        
-    );
-  };
 
 const Requests = (props) => {
     const [synagogues, setSynagogues] = useState ([])
     const [noData, setNoData] = useState (true)
     
+    const renderRequestItem = (itemData) => {
+        return (
+          <SynagogueDetails 
+    onSelect = {() => {
+                Alert.alert("בית כנסת " + itemData.item.synagogueName, "האם לאשר את הבקשה?", 
+                    [ {text: "אשר", onPress: () => {
+                                    Alert.alert("האם לאשר את הבקשה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
+                                        addUserToFirestore(itemData.item) // users 
+                                        addSynagogueToFirestore(itemData.item) //synagogues
+                                        deleteRequestFromFirestore(itemData.item) //requests
+                                        Alert.alert("הבקשה אושרה", null, [ {text: "בסדר"}])
+                                                 }
+                                            }])
+                                    }
+                      }, 
+                      {text: "ביטול"}, {text: "דחה", style: "destructive", onPress: () => {
+                                    Alert.alert("האם לדחות את הבקשה?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
+                                        deleteRequestFromFirestore(itemData.item) //requests
+                                        const index = synagogues.indexOf(itemData.item);
+                                            if (index > -1) {
+                                                synagogues.splice(index, 1); // 2nd parameter means remove one item only
+                                            }
+                                            setSynagogues([...synagogues])
+                                        Alert.alert("הבקשה נדחתה", null, [ {text: "בסדר"}])
+                                                }
+                                            }])
+                        }}, ]
+                      )
+                
+            }}
+            synagogueName = {itemData.item.synagogueName} 
+            synagogueAddress = {itemData.item.synagogueAddress}
+            synagogueSeats = {itemData.item.synagogueSeats}
+            fullName = {itemData.item.firstName + " " + itemData.item.lastName}
+            phone =  {itemData.item.phone}
+            email = {itemData.item.email}
+            password = {itemData.item.password}
+          />
+            
+        );
+      };
     
     //if (user instanceof Gabay)
     
@@ -124,7 +129,7 @@ const Requests = (props) => {
         data={synagogues} renderItem={renderRequestItem} 
         keyExtractor={item => item.body}
         contentContainerStyle={{ paddingBottom: 60, padding: 20, alignItems: 'center' }}
-        //extraData={synagogues}
+        extraData={synagogues}
         //ListEmptyComponent={<Empty message="No data found." />}
         />
         </View>

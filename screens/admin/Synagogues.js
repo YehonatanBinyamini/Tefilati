@@ -18,38 +18,44 @@ const deleteSynagogueFromFirestore = (item) => {
     })
 }
 
-
-const renderRequestItem = (itemData) => {
-    return (
-      <SynagogueDetails 
-        onSelect = {() => {
-            Alert.alert("בית כנסת " + itemData.item.synagogueName, "בחר את האפשרות המתאימה", 
-                [ {text: "ביטול"}, {text: "מחק", style: "destructive", onPress: () => {
-                                Alert.alert("האם למחוק את בית הכנסת מהמאגר?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
-                                    deleteSynagogueFromFirestore(itemData.item) 
-                                    Alert.alert(`בית כנסת ${itemData.item.synagogueName} נמחק`, null, [ {text: "בסדר"}])
-                                            }
-                                        }])
-                    }}, ]
-                  )
-            
-        }}
-        synagogueName = {itemData.item.synagogueName} 
-        synagogueAddress = {itemData.item.synagogueAddress}
-        synagogueSeats = {itemData.item.synagogueSeats.length}
-        // synagogueSeats = {23}
-        fullName = {itemData.item.firstName + " " + itemData.item.lastName}
-        phone =  {itemData.item.phone}
-        email = {itemData.item.email}
-        password = {itemData.item.password}
-      />
-        
-    );
-  };
-
 const Synagogues = (props) => {
     const [synagogues, setSynagogues] = useState ([])
     const [noData, setNoData] = useState (true)
+
+    const renderRequestItem = (itemData) => {
+        return (
+          <SynagogueDetails 
+            onSelect = {() => {
+                Alert.alert("בית כנסת " + itemData.item.synagogueName, "בחר את האפשרות המתאימה", 
+                    [ {text: "ביטול"}, {text: "מחק", style: "destructive", onPress: () => {
+                                    Alert.alert("האם למחוק את בית הכנסת מהמאגר?", null, [ {text: "לא"}, {text: "כן", onPress: () => {
+                                        deleteSynagogueFromFirestore(itemData.item) 
+                                        const index = synagogues.indexOf(itemData.item);
+                                        if (index > -1) {
+                                            synagogues.splice(index, 1); // 2nd parameter means remove one item only
+                                        }
+                                        setSynagogues([...synagogues])
+                                        Alert.alert(`בית כנסת ${itemData.item.synagogueName} נמחק`, null, [ {text: "בסדר"}])
+                                                }
+                                            }])
+                        }}, ]
+                      )
+                
+            }}
+            synagogueName = {itemData.item.synagogueName} 
+            synagogueAddress = {itemData.item.synagogueAddress}
+            synagogueSeats = {itemData.item.synagogueSeats.length}
+            // synagogueSeats = {23}
+            fullName = {itemData.item.firstName + " " + itemData.item.lastName}
+            phone =  {itemData.item.phone}
+            email = {itemData.item.email}
+            password = {itemData.item.password}
+          />
+    
+    
+    
+    );
+      };
     let users = {};
 
     useEffect(() => {
@@ -80,7 +86,6 @@ const Synagogues = (props) => {
                 setNoData(false)
                 //(synagogueName, address, seats, fullName, phone, email, password)
                 const info = doc.data()
-                console.log("********yyyyy********\n",doc._document.key.path.segments[6])
                 const i = info.uidGabay;
                 synagogues.push(new Request(doc._document.key.path.segments[6], info.address, info.seatsArray, users[i].firstName, users[i].lastName, users[i].phoneNumber, users[i].email, users[i].password, info.uidGabay, info.shacharit, info.mincha, info.arvit, info.dafYomi))
                 

@@ -60,6 +60,7 @@ const NotesBoard = (props) => {
                                         if (index > -1) {
                                             NOTES.splice(index, 1); // 2nd parameter means remove one item only
                                         }
+                                        setNOTES([...NOTES])
                                         Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
                                                 }
                                             }])
@@ -167,7 +168,7 @@ const NotesBoard = (props) => {
         data={NOTES} renderItem={renderNoteItem} 
         keyExtractor={item => item.body}
         contentContainerStyle={{ paddingBottom: 60, padding: 20, alignItems: 'center' }}
-        
+        extraData={NOTES}
         />
         </View>
     )
