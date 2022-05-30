@@ -30,6 +30,7 @@ const addSynagogueToFirestore = (synagogue) => {
               arvit: synagogue.arvit,
               dafYomi: synagogue.dafYomi,
               uidGabay: synagogue.uid, // synagogue.uid its the uid of itemData.item
+              counterOn: false,
             });
 }
 

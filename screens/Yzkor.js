@@ -49,11 +49,13 @@ const Yzkor = (props) => {
                 NAMES.push(new Niftar(person.id, person.data().date))
             });
         })
+        setNAMES([...NAMES])
     }
     asy()
     .catch((err) => {
         console.log(err.message)
     })
+    
     },[]);
 
     const renderNamesItem = (itemData) => {
@@ -72,6 +74,7 @@ const Yzkor = (props) => {
                                         if (index > -1) {
                                             NAMES.splice(index, 1); // 2nd parameter means remove one item only
                                         } 
+                                        setNAMES([...NAMES])
                                     Alert.alert("השם הוסר", null, [ {text: "בסדר"}])
                                             }
                                         }])
@@ -140,6 +143,8 @@ const Yzkor = (props) => {
                         changeMarginTop= {5}
                         changeWidth= "40%"
                         onSelect={() => {
+                        setFullName("")
+                        setDate("")
                         setShowModal(true);}}
                     />
                 </View>
@@ -148,6 +153,7 @@ const Yzkor = (props) => {
                     data={NAMES} numColumns={2} renderItem={renderNamesItem}
                     contentContainerStyle={{ paddingBottom: 20, alignItems: "center", justifyContent: "space-around" }}
                     keyExtractor={item => item.fullName}
+                    extraData={NAMES}
                 />
             </ImageBackground>
         </View>

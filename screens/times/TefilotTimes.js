@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
-import {Text, View, StyleSheet, Modal, TouchableWithoutFeedback, TextInput, Keyboard, Alert} from 'react-native';
+import {Text, View, StyleSheet, Modal, TouchableWithoutFeedback, TextInput, Keyboard, Alert, ScrollView} from 'react-native';
 import MyButton from "../../components/MyButton";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc } from "firebase/firestore";
 import Colors from "../../constants/colors";
 import { db } from "../../db/firebase";
+import Home from "../Home";
 
 const TefilotTimes = props => {
   const user = props.navigation.getParam('user');
   const synagogue = props.navigation.getParam('synagogue');
+  const turnedOff = props.navigation.getParam('turnedOff');
+
   const [showModal, setShowModal] = useState(false);
   //synagogue values:
   const [shacharit, setShacharit] = useState(synagogue.shacharit)
   const [mincha, setMincha] = useState(synagogue.mincha)
   const [arvit, setArvit] = useState(synagogue.arvit)
   const [dafYomi, setDafYomi] = useState(synagogue.dafYomi)
+//second modal:
+  const [showCounterModal, setShowCounterModal] = useState(false);
+  const [counterStatus, setCounterStatus] = useState("כבוי")
+  const [colorStatus, setColorStatus] = useState("green")
+  const [buttonCounter, setButtonCounter] = useState("הפעל מונה")
+  const [type, setType] = useState("")
 
 
-    //console.log(rashi)
     return (
         <View style={styles.item}>
           <Modal
@@ -25,8 +33,8 @@ const TefilotTimes = props => {
             visible={showModal}
 
           >
-        
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        
           
           <View style={styles.ModalContainer}>
           <Text style={styles.ModalTitle}>עריכת זמני תפילות</Text>
@@ -77,7 +85,7 @@ const TefilotTimes = props => {
             <MyButton text="אישור" onSelect={() => {
               //const newSynagogue = new Synagogue(synagogueName,synagogueAddress, synagogueSeats, shacharit, mincha, arvit, dafYomi)
               //console.log(newSynagogue)
-              Alert.alert("פרטי בית הכנסת נשמרו",null , [{text: "הבנתי"}])
+              Alert.alert("פרטי בית הכנסת נשמרו",null , [{text: "סגור"}])
               synagogue.setShacharit(shacharit)
               synagogue.setMincha(mincha)
               synagogue.setArvit(arvit)
@@ -97,10 +105,75 @@ const TefilotTimes = props => {
           </TouchableWithoutFeedback>
           
         </Modal>
+      {/* second modal: PRAYERS COUNTER*/}
+        <Modal
+            animationType= {"slide"}
+            transparent= {false}
+            visible={showCounterModal}
+
+          >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        
+          
+          <View style={styles.ModalContainer}>
+          <Text style={styles.ModalTitle}>הפעלת מונה לבדיקת מנין</Text>
+          <Text style={{fontSize: 20, color:colorStatus}}>{`המונה ${counterStatus} כעת`}</Text>
+          { !synagogue.counterOn && (<View style={styles.inputContainer}>
+          <TextInput
+            placeholder="כתוב לאיזו תפילה המונה מופעל"
+            value={type}
+            onChangeText={(text) => {
+              setType(text);
+            }}
+            style={styles.input}
+          />
+          </View>)}
+          
+          <View style={styles.modalButtons}>
+            <MyButton text="ביטול" onSelect={() => {setShowCounterModal(!showCounterModal)}} changeWidth="50%"/>
+            <MyButton text={buttonCounter} onSelect={() => {
+              synagogue.counterOn = !synagogue.counterOn;              
+              setShowCounterModal(false)
+              const theDoc = doc(db, "Synagogues", synagogue.name);
+              updateDoc(theDoc, {
+                counterOn: synagogue.counterOn,
+               });
+
+               if (synagogue.counterOn){
+                 
+                 const ref = doc(db, "Synagogues", user.synagogue, "Counter", "counter");
+                 const a = setDoc(ref, {
+                  type: type,
+                  counterOn: true,
+                  prayers: [], //the prayers that will coming
+                  numOfComings: 0,
+                });
+               } else {
+                  setType("")
+                  const ref = doc(db, "Synagogues", user.synagogue, "Counter", "counter");
+                  const a = setDoc(ref, {
+                  type: "",
+                  counterOn: false,
+                  prayers: [], //the prayers that will coming
+                  numOfComings: 0,
+                });
+               }
+               setTimeout(() => {
+                 turnedOff()
+              }, 1000);      
+            }} 
+              changeWidth="50%" />
+          </View>
+          </View>
+          </TouchableWithoutFeedback>
+          
+        </Modal>
+
 
             <View >
             <Text style={styles.title}>זמני תפילות בבית כנסת {synagogue.name}</Text>
             </View>
+            
             <View style={styles.item}>
             <Text style={styles.text}>שחרית: {synagogue.shacharit}</Text>
             </View>
@@ -115,10 +188,23 @@ const TefilotTimes = props => {
             </View>)}
             <View style={{alignItems: "center"}}>
             {user.isGabay &&  (
-            
-            <MyButton text="ערוך" onSelect={() => {
+            <View style={{width: "80%", alignItems: "center"}}>
+            <MyButton text="ערוך" changeMarginTop={10} onSelect={() => {
               setShowModal(true)
             }}/>
+            <MyButton text="בדיקת מנין" changeMarginTop={10} onSelect={() => {
+              setShowCounterModal(true)
+              if (synagogue.counterOn){
+                setCounterStatus("פועל")
+                setButtonCounter("כבה מונה")
+                setColorStatus("red")
+              } else {
+                setCounterStatus("כבוי")
+                setButtonCounter("הפעל מונה")
+                setColorStatus("green")
+              }
+            }}/>
+            </View>
             )}
           </View>
         </View>
@@ -218,7 +304,7 @@ const styles = StyleSheet.create({
       //justifyContent: "center",
       alignItems: "center",
       backgroundColor: "#ffffd0",
-      padding: 40,
+      padding: 50,
     }
 });
 

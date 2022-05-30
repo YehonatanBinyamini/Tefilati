@@ -1,6 +1,8 @@
 import Category from "../models/others/category";
 
 export const CATEGORIES =[
+    //new Category('c90','מונה תפילות','#66d3fa', 'ChatsScreen'),
+
     new Category('c2','פורום','#66d3fa', 'ChatsScreen'),
     new Category('c1','זמנים','#3c99dc', 'TimesScreen'),
     new Category('c4','לוח מודעות','#d5f3fe', 'NotesBoardScreen'),

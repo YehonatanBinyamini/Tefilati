@@ -14,12 +14,12 @@ const ChooseTime = (props) => {
       
       const user = props.navigation.getParam('user');
       const synagogue = props.navigation.getParam('synagogue');
-
+      const turnedOff = props.navigation.getParam('turnedOff');
         return (
           <CategoryGridTile 
             title= {itemData.item.title} 
             color={itemData.item.color}
-            onSelect={() => {props.navigation.navigate(itemData.item.nextScreen, {user: user, synagogue: synagogue})}}
+            onSelect={() => {props.navigation.navigate(itemData.item.nextScreen, {user: user, synagogue: synagogue, turnedOff: turnedOff})}}
           />
         
         );
