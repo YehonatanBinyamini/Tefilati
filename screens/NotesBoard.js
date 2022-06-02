@@ -61,7 +61,7 @@ const NotesBoard = (props) => {
                                             NOTES.splice(index, 1); // 2nd parameter means remove one item only
                                         }
                                         setNOTES([...NOTES])
-                                        Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
+                                        Alert.alert("המודעה נמחקה", null, [ {text: "סגור"}])
                                                 }
                                             }])
                         }}, ]

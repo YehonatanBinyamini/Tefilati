@@ -38,7 +38,7 @@ const Details = (props) => {
                                             cards.splice(index, 1); // 2nd parameter means remove one item only
                                         } 
                                         setCards([...cards])
-                                        Alert.alert(`התיעוד ${itemData.item.subject} נמחק`, null, [ {text: "בסדר"}])
+                                        Alert.alert(`התיעוד ${itemData.item.subject} נמחק`, null, [ {text: "סגור"}])
                                                 }
                                             }])
                         }} ]

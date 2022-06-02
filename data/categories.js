@@ -11,4 +11,6 @@ export const CATEGORIES =[
     new Category('c5','לימוד יומי', '#6ba3fa', 'DailyLearningScreen'),
     new Category('c7','ניווט לבית הכנסת','#3667f0', 'NavigateToSynagogueScreen'),
     new Category('c8','מצפן',"#90cfff", 'CompassScreen'),
+    new Category('c80','רשימת מתפללים',"#9123ff", 'PrayersListScreen'),
+
 ]

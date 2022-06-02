@@ -35,7 +35,7 @@ const Synagogues = (props) => {
                                             synagogues.splice(index, 1); // 2nd parameter means remove one item only
                                         }
                                         setSynagogues([...synagogues])
-                                        Alert.alert(`בית כנסת ${itemData.item.synagogueName} נמחק`, null, [ {text: "בסדר"}])
+                                        Alert.alert(`בית כנסת ${itemData.item.synagogueName} נמחק`, null, [ {text: "סגור"}])
                                                 }
                                             }])
                         }}, ]

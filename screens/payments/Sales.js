@@ -95,7 +95,7 @@ const Sales = (props) => {
                             }
                             setDATA([...DATA])
                             setDataInFirestore()
-                            Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
+                            Alert.alert("המודעה נמחקה", null, [ {text: "סגור"}])
                                     }
                                 }])
             }}] : [ {text: "ביטול", style: "cancel"}, {text: "קנה",style:"destructive", onPress: () => {
@@ -128,7 +128,7 @@ const Sales = (props) => {
                                             }
                                             setDATA([...DATA])
                                             setDataInFirestore()
-                                            Alert.alert("המודעה נמחקה", null, [ {text: "בסדר"}])
+                                            Alert.alert("המודעה נמחקה", null, [ {text: "סגור"}])
                                                     }
                                                 }])
                             }}, ]

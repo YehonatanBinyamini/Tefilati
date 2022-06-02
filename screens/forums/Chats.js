@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, collection, getDocs } from "firebase/firestore"; 
 import { db } from '../../db/firebase'
-import { collection, getDocs } from "firebase/firestore";
 
 const Chats = (props) => {
     const user = props.navigation.getParam('user');
@@ -11,54 +10,38 @@ const Chats = (props) => {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
+      const temp = []
         getDocs(collection(db, "chats"))
         .then((querySnapshot) => {querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
             setIndex(index + 1)
-            messages.push(doc.data())
+            i++;
+            const message = doc.data()
+            message.createdAt = message.createdAt.toDate()
+            temp.push(message)
         });
         })
         .catch((err) => {
             console.log(err.message)
         })
 
-        
+        setTimeout(() => {
+
+          setMessages(temp.reverse())
+        }, 1000);  
     },[]);
     
 
     let i = 0
 
-    const data = ['מה המצב?']
-  useEffect(() => {
-    // setMessages([
-    //   {
-    //     _id: 1,
-    //     text: data, //'Hello developer',
-    //     createdAt: new Date(),
-    //     user: {
-    //       _id: 2,
-    //       name: 'משה',
-    //       avatar: NaN, //'https://placeimg.com/140/140/any',
-    //     },
-    //   },
-    //   {
-    //     _id: 3,
-    //     text: data, //'Hello developer',
-    //     createdAt: new Date(),
-    //     user: {
-    //       _id: 4,
-    //       name: 'ביבי',
-    //       avatar: NaN, //'https://placeimg.com/140/140/any',
-    //     },
-    //   },
-    // ])
-    setMessages(messages.reverse())
-  }, [])
+    
 
   const onSend = useCallback((messages = []) => {
       setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-
-      const ref = doc(db, "chats", 'chat' + index);
+      
+      i++;
+      const ref = doc(db, "chats", i.toString());
+      console.log(messages[0], i)
       setDoc(ref, messages[0]);
       setIndex(index + 1)
 
@@ -69,6 +52,7 @@ const Chats = (props) => {
     <GiftedChat
         placeholder='כתוב כאן'
         messages={messages}
+        renderUsernameOnMessage={true}
         onSend={messages => onSend(messages)}
         user={{
         _id: user.uid,

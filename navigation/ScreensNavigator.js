@@ -5,8 +5,6 @@ import ChooseTime from "../screens/times/ChooseTime";
 import Login from "../screens/connect/Login";
 import NewUser from "../screens/connect/NewUser";
 import Colors from "../constants/colors";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import CustomHeaderButtons from "../components/HeaderButton";
 import Halacha from "../screens/times/Halacha";
 import TefilotTimes from "../screens/times/TefilotTimes";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -22,11 +20,12 @@ import PaySeat from "../screens/payments/PaySeat";
 import NavigateToSynagogue from "../screens/NavigateToSynagogue";
 import Yzkor from "../screens/Yzkor";
 import PrayersList from "../screens/drawer/PrayersList";
-import { Header } from "react-native-elements";
 import Synagogues from "../screens/admin/Synagogues";
 import Donation from "../screens/payments/Donation";
 import Details from "../screens/payments/Details";
 import Sales from "../screens/payments/Sales";
+import Covid19 from "../screens/Covid19";
+import Deleted from "../screens/Deleted";
 
 const ScreensNavigator = createStackNavigator({
     LoginScreen: Login,
@@ -51,6 +50,7 @@ const ScreensNavigator = createStackNavigator({
     DonationScreen: Donation,
     DetailsScreen: Details,
     SalesScreen: Sales,
+    DeletedScreen: Deleted,
     },
 
     { 
@@ -74,14 +74,11 @@ const MainNavigator = createDrawerNavigator({
             drawerLabel: 'מסך ראשי',
         }
     },
-    Mitpalelim: {
+    covid19: {
         
-        screen: PrayersList,
+        screen: Covid19,
         navigationOptions: {
-            drawerLabel: 'רשימת מתפללים',
-            user: Home.user,
-            synagogue: Home.synagogue,
-            header: Header,
+            drawerLabel: 'הנחיות קורונה',
         }
     }
 

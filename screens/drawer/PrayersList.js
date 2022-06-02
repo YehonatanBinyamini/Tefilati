@@ -1,122 +1,193 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {Text, View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import  auth  from "../../db/firebase";
+import React, { useEffect, useState } from "react";
+import {Text, View, StyleSheet, Alert, FlatList, TextInput} from 'react-native';
+import { doc, setDoc, query, where, collection, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc, query, where, collection, getDoc, getDocs } from "firebase/firestore"; 
+import auth from "../../db/firebase";
 import { db } from "../../db/firebase";
-import Gabay from "../../models/users/Gabay";
 import Prayer from "../../models/users/Prayer";
-import Loading from "../../components/Loading";
-import MyHeader from "../../components/MyHeader"
 import UserDetails from "../../components/UserDetails";
-import { RefreshControl } from "react-native";
+import MyButton from "../../components/MyButton";
+import Loading from "../../components/Loading";
+
+const deleteUserFromSynagogues = (user) => {
+  const ref = doc(db, "users", user.uid);
+      updateDoc(ref, {
+        synagogue: "",
+      });
+}
 
 const PrayersList = props => {
     
     const [USERS, setUSERS] =useState([]);
-    const [hideUsers, setHideUsers] =useState([]);
-    const [isLoading, setIsLoading] =useState(true)
-    const [refreshing, setRefreshing] = React.useState(false);
+    const [addUser, setAddUser] = useState(false)
+    const [textButtonAdd, setTextButtonAdd] = useState("הוסף משתמש קיים")
+    const [errorMessage, setErrorMessage] = useState('')
+    const [email, setEmail] = useState('')
+    const [wasCalled, setWasCalled] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    let user;
-    const aaa = () => {
-        setRefreshing(true)
-        wait(2000).then(() => setRefreshing(false));
-    }
+    const user = props.navigation.getParam('user');
+    const synagogue = props.navigation.getParam('synagogue');  
        
-    
 
-    const findUsersInSynagogue = (synagogue) => {
+    useEffect(() => {
 
-            const q = query(collection(db, "users"), where("synagogue", "==", synagogue));
+      
 
-            const querySnapshot = getDocs(q)
+            const asy = async () => {
+            const usersRef = collection(db, "users")
+            const q = query(usersRef, where("synagogue", "==", user.synagogue ));
+
+            const querySnapshot = await getDocs(q)
             .then((querySnapshot) => { querySnapshot.forEach((doc) => {
                 const info = doc.data()
-                USERS.push(new Prayer(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info. synagogue))
+                  USERS.push(new Prayer(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info.synagogue))
+                  setUSERS([...USERS])                
+              })
             })
-            })
-            .catch((err) => {
+          }
+          asy()
+          .catch((err) => {
+            console.log(err.message)
+          })
+    },[])
 
-            })
-            
+    const updateUserSynagogue = (info, synagogueName) => {
+      
+      const newUser = new Prayer(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info.synagogue)
+      const result = USERS.filter(user => user.uid == newUser.uid);
+      if (result.length != 0){
+        Alert.alert(`המשתמש ${info.firstName+" "+info.lastName} כבר משוייך לבית הכנסת`, null, [{text: "סגור"}])
+      } else {
+        const ref = doc(db, "users", info.uid);
+        updateDoc(ref, {
+            synagogue: synagogueName,
+        });
+        USERS.push(newUser)
+        setUSERS([...USERS])
+        Alert.alert(`המשתמש ${info.firstName+" "+info.lastName} נוסף בהצלחה`, null, [{text: "סגור"}])
+      }
     }
-
-
-useEffect(() => {
-        const auth = getAuth();
-        console.log('auth is:', auth.currentUser.uid);
-        const docRef = doc(db, "users", auth.currentUser.uid);
-        getDoc(docRef)
-        .then((doc)=> {
-            if (doc.exists()){
-              const info = doc.data()
-              if (info.isGabay){
-                user = new Gabay(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info.synagogue)
-                user.setIsGabay(true)
-                console.log(user.synagogue)
-                setIsLoading(false)
-                //USERS.push(user)
-                findUsersInSynagogue(user.synagogue)
-              }
-              else {
-                user = new Prayer(info.firstName, info.lastName, info.uid, info.phone, info.email, info.password, info.synagogue)
-            }
-        }
-        else{
-            console.log("user is not found")
-        }
-    })
-    .catch((err) => {
-        console.log("doc err", err)
-    })
-},[])
-
-const renderUserItem = (itemData) => {
-    return (
-      <UserDetails
-        synagogueName = {itemData.item.synagogue} 
-        fullName = {itemData.item.firstName + " " + itemData.item.lastName}
-        phone =  {itemData.item.phoneNumber}
-        email = {itemData.item.email}
-      />
-   );
-  };
-
-    //console.log(rashi)
-    return (
-    //     <View style={styles.screen}>
-    //         
-
-    //               { isLoading ? <View style={styles.loading}><Loading/></View> : (
-    // <View>
-    //     {/* <View style={styles.item}>
-    //         <Text style={styles.title}>רשימת מתפללים</Text>
-    //     </View> */}
-    //         <View style={{justifyContent: "center"}}>
-    //             {/* <Text>{USERS[0]}</Text> */}
-    //         </View>
+      
+    const renderUserItem = (itemData) => {
+      return (
+        <UserDetails
+          synagogueName = {itemData.item.synagogue} 
+          fullName = {itemData.item.firstName + " " + itemData.item.lastName}
+          phone =  {itemData.item.phoneNumber}
+          email = {itemData.item.email}
+          onSelect = {() => { if (user.isGabay || user.uid == itemData.item.uid){
+            const userName = itemData.item.firstName + " " + itemData.item.lastName;
+            if (user.isGabay){
+              Alert.alert(userName, "בחר את האפשרות המתאימה", 
+                [{text: "ביטול", style: "cancel"}, 
+                 {text: "מנה לגבאי", onPress: ()=>{
+                                    const ref = doc(db, "users", itemData.item.uid);
+                                    updateDoc(ref, {
+                                        isGabay: true,
+                                    });
+                                    Alert.alert(`המשתמש ${userName} מונה לגבאי`, null, [{text: "סגור"}])          
+                 }} ,
+                 {text: "הסר", style: "destructive", onPress: () => {
+                                    Alert.alert(`האם להסיר את ${userName} ממאגר בית הכנסת?`, "הגישה לנתוני בית הכנסת תיחסם", [ {text: "לא"}, {text: "כן", onPress: () => {
+                                    deleteUserFromSynagogues(itemData.item) 
+                                    const index = USERS.indexOf(itemData.item);
+                                    if (index > -1) {
+                                        USERS.splice(index, 1); // 2nd parameter means remove one item only
+                                    }
+                                    setUSERS([...USERS])
+                                    Alert.alert("המשתמש הוסר", null, [ {text: "סגור"}])
+                                            }
+                                        }])
+                    }}, ]
+                  )}
+                  else {
+                    Alert.alert(userName, "בחר את האפשרות המתאימה", 
+                [{text: "ביטול", style: "cancel"}, 
+                 {text: "הסר", style: "destructive", onPress: () => {
+                                    Alert.alert(`האם להסיר את ${userName} ממאגר בית הכנסת?`, "הגישה לנתוני בית הכנסת תיחסם", [ {text: "לא"}, {text: "כן", onPress: () => {
+                                    deleteUserFromSynagogues(itemData.item) 
+                                    const index = USERS.indexOf(itemData.item);
+                                    if (index > -1) {
+                                        USERS.splice(index, 1); // 2nd parameter means remove one item only
+                                    }
+                                    setUSERS([...USERS])
+                                    Alert.alert("המשתמש הוסר", null, [ {text: "סגור"}])
+                                            }
+                                        }])
+                    }}, ]
+                  )
+                  }
+                }  
+        }}
+        />
+      );
+    };
     
-    
-    // </View>) }
-    //     </View>
+    return (
+
     <View style={styles.screen}>
-        <MyHeader title="רשימת מתפללים" onSelect={() => {
-                 props.navigation.toggleDrawer();
-                 setHideUsers(USERS)
-                 setUSERS([])
-             }}/>
+         {addUser && (
+           isLoading ? <View style={styles.loading}><Loading/></View> :
+           <View  style={styles.inputContainer}>
+            <Text style={styles.text}>הוסף משתמשים קיימים בלבד</Text>
+            <TextInput
+              placeholder="דואר אלקטרוני"
+              value={email}
+              onChangeText={text => {setEmail(text.replace(' ','')); setErrorMessage('') 
+            }}
+              style={styles.input}
+              keyboardType='email-address'
+            />
+            {(errorMessage.length > 0) && <Text style={styles.error}>{errorMessage}</Text>}
+            
+          <View style={{flexDirection: "row"}}>
+            <MyButton text="ביטול" onSelect={() => { setAddUser(false); setEmail("")}} changeWidth="50%"/>
+            <MyButton text="אישור" onSelect={() => {
+              console.log(wasCalled)
+              let called = false;
+            setIsLoading(true)  
+            const usersRef = collection(db, "users")
+            const q = query(usersRef, where("email", "==", email ));
+            const querySnapshot = getDocs(q)
+            .then((querySnapshot) => { querySnapshot.forEach((doc) => {
+              const info = doc.data()
+              called = true;
+              //setWasCalled(true)
+              updateUserSynagogue(info, user.synagogue)
+              setAddUser(false)
+              setIsLoading(false)
+              setEmail("")              
+            })
+          })
+          .catch((err) => {
+            console.log(err.message)      
+          })
+          if (email.length == 0) {
+            setAddUser(false)
+            setIsLoading(false)
+          } else {
+          setTimeout(() => {
+            if (!called){
+              setErrorMessage("דואר אלקטרוני לא קיים")
+              setIsLoading(false)
+            }
+            }, 2500);
+          }
+            }} 
+                  changeWidth="50%" />
+        </View>
+          </View>
+         )}
+         { user.isGabay && (!addUser && <MyButton text={textButtonAdd} onSelect={()=>{
+            setAddUser(true)
+          }}/>)}
          <FlatList
-            // refreshControl={
-            //     <RefreshControl 
-            //     refreshing={refreshing}
-            //     onRefresh={aaa}
-            //   />
-            // }
             data={USERS}
             renderItem={renderUserItem}
             keyExtractor={item => item.uid}
             contentContainerStyle={{ paddingBottom: 60, padding: 20, alignItems: 'center' }}
+            extraData={USERS}
             />
     </View>
     );
@@ -127,10 +198,10 @@ const renderUserItem = (itemData) => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        alignContent: "center",
+        alignItems: "center",
     },
     loading: {
-        marginTop: 52,
+        marginTop: 20,
         padding: 0
       },
     item: {
@@ -155,14 +226,31 @@ const styles = StyleSheet.create({
         
       },
       text: {
+        marginTop: 10,
         textAlign: 'center',
-        fontSize: 28,
+        fontSize: 22,
         fontWeight: "bold",
+      },
+      inputContainer: {
+        width: '80%'
+      },
+      input: {
+        textAlign: "right",
+        backgroundColor: 'white',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 15,
+      },
+      error: {
+        color: 'red',
+        textAlign: "right",
       }
 });
 
 PrayersList.navigationOptions = {
     headerTitle: "רשימת מתפללים",
+    headerBackTitle: "מסך הבית"
   };
   
 export default PrayersList;

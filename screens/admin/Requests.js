@@ -63,7 +63,7 @@ const Requests = (props) => {
                                         addUserToFirestore(itemData.item) // users 
                                         addSynagogueToFirestore(itemData.item) //synagogues
                                         deleteRequestFromFirestore(itemData.item) //requests
-                                        Alert.alert("הבקשה אושרה", null, [ {text: "בסדר"}])
+                                        Alert.alert("הבקשה אושרה", null, [ {text: "סגור"}])
                                                  }
                                             }])
                                     }
@@ -76,7 +76,7 @@ const Requests = (props) => {
                                                 synagogues.splice(index, 1); // 2nd parameter means remove one item only
                                             }
                                             setSynagogues([...synagogues])
-                                        Alert.alert("הבקשה נדחתה", null, [ {text: "בסדר"}])
+                                        Alert.alert("הבקשה נדחתה", null, [ {text: "סגור"}])
                                                 }
                                             }])
                         }}, ]
@@ -104,7 +104,6 @@ const Requests = (props) => {
             .then((querySnapshot) => {querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                 setNoData(false)
-                console.log(doc.data())
                 //(synagogueName, address, seats, fullName, phone, email, password)
                 const info = doc.data()
                 synagogues.push(new Request(info.synagogueName, info.synagogueAddress, info.synagogueSeats, info.firstName, info.lastName, info.phone, info.email, info.password, info.uid, info.shacharit, info.mincha, info.arvit, info.dafYomi))

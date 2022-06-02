@@ -14,23 +14,26 @@ import Synagogue from "../../models/others/Synagogue";
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
 const getSynagogueFromFirestore = async (props, user) => {
-  const docRef = doc(db, "Synagogues", user.synagogue);
-          await getDoc(docRef)
-          .then((doc)=> {
-            if (doc.exists()){
-              const info = doc.data()
-              console.log(info)
-              const synagogue = new Synagogue(doc.id, info.address, info.seatsArray, info.shacharit, info.mincha, info.arvit, info.dafYomi, info.uidGabay)
-              props.navigation.replace("HomeScreen", {user: user, synagogue: synagogue});  
+  if (user.synagogue.length == 0){
+    props.navigation.replace("DeletedScreen");
+  } else {
+      const docRef = doc(db, "Synagogues", user.synagogue);
+              await getDoc(docRef)
+              .then((doc)=> {
+                if (doc.exists()){
+                  const info = doc.data()
+                  console.log(info)
+                  const synagogue = new Synagogue(doc.id, info.address, info.seatsArray, info.shacharit, info.mincha, info.arvit, info.dafYomi, info.uidGabay)
+                  props.navigation.replace("HomeScreen", {user: user, synagogue: synagogue});  
+                }
+                else{
+                  console.log("there is no synagogue for this user")
+                }
+              })
+              .catch((err) => {
+                console.log("doc err", err)
+              })
             }
-            else{
-              console.log("there is no synagogue for this user")
-            }
-          })
-          .catch((err) => {
-            console.log("doc err", err)
-          })
-
 }
 
 const getFirestoreUser = (props, uid) => {
