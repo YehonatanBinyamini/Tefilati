@@ -1,5 +1,5 @@
 class Admin extends User{
-    constructor(firstName, lastName, id, phoneNumber, userName, password){
-        super(firstName, lastName, id, phoneNumber, userName, password);
+    constructor(firstName, lastName, uid, phoneNumber, email, password){
+        super(firstName, lastName, uid, phoneNumber, email, password, null);
     }
 }
