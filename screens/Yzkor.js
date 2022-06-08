@@ -90,7 +90,6 @@ const Yzkor = (props) => {
     
       return (
           <View style={styles.screen}> 
-            { noData && (<View><Text>טקסט</Text></View>)}
             <Modal
                             animationType= {"slide"}
                             transparent= {false}
