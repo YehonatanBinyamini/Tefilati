@@ -11,7 +11,7 @@ const Chats = (props) => {
 
     useEffect(() => {
       const temp = []
-        getDocs(collection(db, "chats"))
+        getDocs(collection(db, "Synagogues", user.synagogue ,"chat"))
         .then((querySnapshot) => {querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
             setIndex(index + 1)
@@ -40,7 +40,7 @@ const Chats = (props) => {
       setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
       
       i++;
-      const ref = doc(db, "chats", i.toString());
+      const ref = doc(db, "Synagogues", user.synagogue ,"chat", i.toString());
       console.log(messages[0], i)
       setDoc(ref, messages[0]);
       setIndex(index + 1)
