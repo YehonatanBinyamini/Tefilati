@@ -1,7 +1,6 @@
 import React, {useRef, useEffect, useState} from "react";
 import { View, StyleSheet, Alert, FlatList, Animated, TouchableWithoutFeedback } from "react-native";
 import { Text, Input, Button, Chip } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { CATEGORIES } from "../data/categories";
 import CategoryGridTile from "../components/CategoryGridTile";
 import CustomHeaderButtons from "../components/HeaderButton";
